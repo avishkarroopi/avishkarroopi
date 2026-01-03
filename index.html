@@ -642,30 +642,63 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
-            .hero-grid { grid-template-columns: 1fr; text-align: center; }
-            .hero-content h1 { font-size: 2.5rem; }
-            .founder-creds { border-left: none; border-top: 3px solid var(--royal-yellow); padding-top: 15px; padding-left: 0; display: inline-block; }
-            .hero-img-wrapper { max-width: 400px; margin: 40px auto 0; }
-            .hero-img-wrapper::before { top: 15px; right: -15px; }
+            .section-padding { padding: 50px 0; }
+            
+            /* Hero Mobile Fixes */
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+            .hero-content h1 { font-size: 2.2rem; margin-bottom: 15px; }
+            .hero-sub { font-size: 1rem; }
+            #hero { padding-top: 100px; padding-bottom: 50px; }
+            
+            .founder-creds { 
+                border-left: none; 
+                border-top: 3px solid var(--royal-yellow); 
+                padding-top: 15px; 
+                padding-left: 0; 
+                display: inline-block; 
+                margin-bottom: 20px;
+            }
             .founder-badges { justify-content: center; }
+
+            .hero-img-wrapper { 
+                max-width: 100%; 
+                margin: 20px auto 0; 
+            }
+            .hero-img-wrapper::before { top: 15px; right: -15px; }
+            
+            .price-tag { justify-content: center; }
+            .scarcity { justify-content: center; }
+
+            /* Nav Mobile Fixes */
             .nav-links {
                 position: fixed;
                 top: 70px;
                 left: 0;
                 width: 100%;
-                background: var(--base-black);
+                background: rgba(5, 5, 5, 0.98); /* Solid dark background */
                 flex-direction: column;
                 padding: 40px;
                 clip-path: circle(0% at 100% 0);
                 transition: all 0.5s ease-in-out;
+                z-index: 998;
+                border-bottom: 1px solid var(--glass-border);
             }
-            .nav-links.active { clip-path: circle(140% at 100% 0); }
+            .nav-links.active { clip-path: circle(150% at 100% 0); }
             .mobile-toggle { display: block; }
+
+            /* Roadmap Mobile Fixes */
             .roadmap-container::before { left: 20px; }
-            .roadmap-step { flex-direction: column !important; align-items: flex-start; padding-left: 50px; }
+            .roadmap-step { flex-direction: column !important; align-items: flex-start; padding-left: 60px; margin-bottom: 40px; }
             .step-marker { left: 20px; transform: translateX(-50%); }
             .step-content { width: 100%; }
+
+            /* Pricing Mobile Fixes */
+            .price-large { font-size: 3rem; }
+            
+            /* General Grid Fixes */
             .tools-grid { grid-template-columns: 1fr; }
+            .clients-flex { flex-direction: column; gap: 40px; }
+            .section-header h2 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -688,7 +721,7 @@
                     <a href="#learn">What You’ll Learn</a>
                     <a href="#roadmap">Roadmap</a>
                     <a href="#tools">Free Tools</a>
-                    <a href="#enquiry" class="muziclly-btn" target="_blank">Muziclly Official</a>
+                    <a href="https://avishkarroopi.github.io/muzicllyworld/" class="muziclly-btn" target="_blank">Muziclly Official</a>
                 </div>
 
                 <div class="mobile-toggle" onclick="toggleMenu()">
@@ -721,7 +754,7 @@
                         <span class="new-price">₹0</span>
                     </div>
 
-                    <a href="#enquiry" class="btn btn-primary">Enroll FREE – Limited Seats</a>
+                    <a href="https://wa.me/919550429016" class="btn btn-primary">Enroll FREE – Limited Seats</a>
                     
                     <div class="scarcity">
                         <i class="fas fa-exclamation-circle"></i> Access will be closed once seats are filled
@@ -972,7 +1005,7 @@
                 </div>
                 <p style="color:var(--text-gray); margin-bottom: 30px;">Seats will close without notice.</p>
                 
-                <a href="#enquiry" class="btn btn-primary" style="width: 100%;">Claim Free Spot</a>
+                <a href="https://wa.me/919550429016" class="btn btn-primary" style="width: 100%;">Claim Free Spot</a>
             </div>
         </div>
     </section>
