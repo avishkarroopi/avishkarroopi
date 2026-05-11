@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENESIS Documentation | Persistent Cognitive Orchestration</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        navy: {
+                            900: '#030712',
+                            800: '#0a101f',
+                            700: '#111827',
+                            600: '#1f2937',
+                        },
+                        cyan: {
+                            400: '#00f0ff',
+                            500: '#00d5e6',
+                            900: 'rgba(0, 240, 255, 0.1)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-grid: rgba(255, 255, 255, 0.02);
+            --cyan-glow: 0 0 20px rgba(0, 240, 255, 0.15);
+            --glass-bg: rgba(10, 16, 31, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: #030712;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background Grid */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, var(--bg-grid) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--bg-grid) 1px, transparent 1px);
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -2;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -20%; left: -10%;
+            width: 70%; height: 70%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.03) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover, .hover-glow:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: var(--cyan-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Terminal UI */
+        .terminal-header {
+            background: #111827;
+            border-bottom: 1px solid #1f2937;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .terminal-body {
+            background: #0a0f1c;
+            border-radius: 0 0 0.5rem 0.5rem;
+            border: 1px solid #1f2937;
+            border-top: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse-line {
+            0% { border-color: rgba(0, 240, 255, 0.1); }
+            50% { border-color: rgba(0, 240, 255, 0.8); box-shadow: 0 0 10px rgba(0,240,255,0.4); }
+            100% { border-color: rgba(0, 240, 255, 0.1); }
+        }
+        .animate-flow-line {
+            animation: pulse-line 2s infinite;
+        }
+
+        @keyframes data-flow {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        .data-particle {
+            position: absolute;
+            top: 50%;
+            width: 4px; height: 4px;
+            background: #00f0ff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00f0ff;
+            animation: data-flow 2s infinite linear;
+        }
+
+        /* Sidebar Nav active state */
+        .nav-link.active {
+            color: #00f0ff;
+            border-left-color: #00f0ff;
+            background: linear-gradient(90deg, rgba(0,240,255,0.1) 0%, transparent 100%);
+        }
+
+        /* Accordion */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-btn.active .chevron {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500/30 selection:text-cyan-50">
+
+    <!-- Backgrounds -->
+    <div class="bg-grid-pattern"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Floating Right Icons -->
+    <div class="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-50 hidden lg:flex">
+        <a href="https://github.com/avishkarroopi" target="_blank" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400 transition-all group">
+            <i data-lucide="github" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400 transition-all group">
+            <i data-lucide="linkedin" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400 transition-all group">
+            <i data-lucide="message-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400 transition-all group">
+            <i data-lucide="phone" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </a>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full glass-panel rounded-none z-50 border-b border-white/10 px-6 py-4 flex justify-between items-center">
+        <div class="font-mono font-bold text-lg flex items-center gap-2 text-white">
+            <div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f0ff]"></div>
+            GENESIS<span class="text-slate-500 font-light">/docs</span>
+        </div>
+        <button id="mobile-menu-btn" class="text-slate-300">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <div class="flex max-w-[1600px] mx-auto min-h-screen pt-16 lg:pt-0">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="w-64 fixed h-screen top-0 left-0 border-r border-white/5 bg-navy-900/80 backdrop-blur-xl hidden lg:block overflow-y-auto pb-10 z-40">
+            <div class="p-6">
+                <div class="font-mono font-bold text-xl flex items-center gap-3 text-white mb-8">
+                    <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f0ff] animate-pulse"></div>
+                    GENESIS<span class="text-slate-500 text-sm font-light mt-1">/docs</span>
+                </div>
+                
+                <nav class="space-y-1 text-sm font-mono" id="toc">
+                    <div class="text-xs font-sans font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-6">Core Infrastructure</div>
+                    <a href="#hero" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">00_Hero</a>
+                    <a href="#intro" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">01_Introduction</a>
+                    <a href="#overview" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">02_System_Overview</a>
+                    
+                    <div class="text-xs font-sans font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-8">Architecture</div>
+                    <a href="#structure" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">03_File_Structure</a>
+                    <a href="#modules" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">04_Core_Modules</a>
+                    <a href="#flow" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">05_Runtime_Flow</a>
+                    <a href="#governance" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">06_Governance</a>
+                    <a href="#memory" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">07_Memory_Systems</a>
+                    <a href="#orchestration" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">08_Orchestration</a>
+                    
+                    <div class="text-xs font-sans font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-8">Ecosystem</div>
+                    <a href="#integrations" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">09_Integrations</a>
+                    <a href="#deployment" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">10_Deployment_Stack</a>
+                    <a href="#roadmap" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">11_Future_Roadmap</a>
+                    
+                    <div class="text-xs font-sans font-semibold text-slate-500 uppercase tracking-wider mb-3 mt-8">Author</div>
+                    <a href="#architect" class="nav-link block py-2 px-3 border-l-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">12_Architect_Profile</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 lg:ml-64 p-6 md:p-12 lg:p-20 lg:pr-32 max-w-5xl">
+            
+            <!-- SECTION 1: HERO -->
+            <section id="hero" class="min-h-[85vh] flex flex-col justify-center relative reveal">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-mono mb-8 w-max">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    SYSTEM RUNTIME: ACTIVE
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                    GENESIS <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-mono text-4xl md:text-6xl mt-2 block">Documentation</span>
+                </h1>
+                
+                <h2 class="text-xl md:text-2xl text-slate-300 font-light mb-6 max-w-2xl">
+                    Persistent Cognitive Orchestration Infrastructure
+                </h2>
+                
+                <p class="text-slate-400 mb-10 max-w-3xl leading-relaxed text-lg">
+                    Technical documentation for the GENESIS runtime orchestration architecture, adaptive execution systems, governance layers, multi-agent coordination infrastructure, and cognitive runtime components.
+                </p>
+                
+                <div class="flex flex-wrap gap-4 font-mono text-sm">
+                    <a href="#overview" class="flex items-center gap-2 px-6 py-3 rounded-md bg-cyan-500/10 border border-cyan-400/50 text-cyan-300 hover:bg-cyan-400 hover:text-navy-900 transition-all hover:shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                        Explore Architecture
+                    </a>
+                    <a href="https://github.com/avishkarroopi" target="_blank" class="flex items-center gap-2 px-6 py-3 rounded-md glass-panel text-slate-300 hover:text-white hover:border-white/40 transition-all">
+                        <i data-lucide="github" class="w-4 h-4"></i>
+                        View GitHub
+                    </a>
+                </div>
+            </section>
+
+            <!-- SECTION 2: INTRODUCTION -->
+            <section id="intro" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">01. <span class="text-cyan-400">Introduction</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+                
+                <div class="glass-panel p-8 md:p-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl"></div>
+                    <p class="text-lg text-slate-300 leading-relaxed font-light relative z-10">
+                        <strong class="text-white font-medium">GENESIS</strong> is a persistent orchestration infrastructure designed for adaptive AI execution, multi-agent coordination, runtime cognition, governance enforcement, and scalable tool-integrated reasoning systems. 
+                        <br><br>
+                        It bridges the gap between single-prompt generation and persistent, stateful, autonomous execution, providing a robust backbone for enterprise-grade AGI applications.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECTION 3: SYSTEM OVERVIEW -->
+            <section id="overview" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">02. <span class="text-cyan-400">System Overview</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+                
+                <div class="glass-panel p-6">
+                    <!-- Architecture Diagram Container -->
+                    <div class="relative w-full aspect-[4/3] md:aspect-video rounded-lg bg-[#050a14] border border-white/5 p-4 flex flex-col justify-between overflow-hidden">
+                        
+                        <!-- Grid Lines -->
+                        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: linear-gradient(#1f2937 1px, transparent 1px), linear-gradient(90deg, #1f2937 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+                        <!-- Top Level -->
+                        <div class="flex justify-center z-10 relative">
+                            <div class="glass-card px-6 py-2 border-cyan-500/30 text-cyan-100 font-mono text-sm shadow-[0_0_15px_rgba(0,240,255,0.1)] flex items-center gap-2">
+                                <i data-lucide="monitor" class="w-4 h-4 text-cyan-400"></i> Client Layer
+                            </div>
+                        </div>
+
+                        <!-- Connections -->
+                        <div class="w-full flex justify-center py-2 z-10">
+                            <div class="w-px h-6 bg-cyan-500/30"></div>
+                        </div>
+
+                        <!-- Middle Tier -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-10 relative">
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-xs text-slate-500 font-mono mb-2">Input</div>
+                                <div class="font-medium text-slate-200">Intent Processing</div>
+                            </div>
+                            <div class="glass-card p-4 text-center border border-cyan-500/50 shadow-[0_0_20px_rgba(0,240,255,0.15)] relative">
+                                <div class="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
+                                <div class="text-xs text-cyan-400 font-mono mb-2">Kernel</div>
+                                <div class="font-bold text-white tracking-wide">Runtime Core</div>
+                            </div>
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-xs text-slate-500 font-mono mb-2">Control</div>
+                                <div class="font-medium text-slate-200">Governance</div>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex justify-center py-2 z-10 relative">
+                            <div class="w-full max-w-[60%] border-t border-cyan-500/30 relative">
+                                <div class="absolute left-0 w-px h-6 bg-cyan-500/30"></div>
+                                <div class="absolute left-1/2 w-px h-6 bg-cyan-500/30"></div>
+                                <div class="absolute right-0 w-px h-6 bg-cyan-500/30"></div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Tier Components -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 z-10 relative mt-4">
+                            <div class="glass-card p-3 text-xs text-center text-slate-300 font-mono">CapabilityGraph</div>
+                            <div class="glass-card p-3 text-xs text-center text-slate-300 font-mono">ToolRegistry</div>
+                            <div class="glass-card p-3 text-xs text-center text-slate-300 font-mono">Memory Layer</div>
+                            <div class="glass-card p-3 text-xs text-center text-slate-300 font-mono">EventBus</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-6 z-10 relative">
+                            <div class="p-3 border border-dashed border-white/20 rounded flex items-center justify-center text-sm font-mono text-slate-400 bg-white/5">
+                                Execution Systems
+                            </div>
+                            <div class="p-3 border border-dashed border-white/20 rounded flex items-center justify-center text-sm font-mono text-slate-400 bg-white/5">
+                                External Integrations
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: FOLDER STRUCTURE -->
+            <section id="structure" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">03. <span class="text-cyan-400">File Structure</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="rounded-lg overflow-hidden shadow-2xl">
+                    <div class="terminal-header px-4 py-3 flex items-center gap-2">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono ml-4">genesis-workspace ~ tree .</div>
+                    </div>
+                    <div class="terminal-body p-6 font-mono text-sm overflow-x-auto text-slate-300">
+<pre class="leading-relaxed">
+<span class="text-cyan-400">genesis/</span>
+├── <span class="text-blue-400">core/</span>         <span class="text-slate-500"># Base orchestrator & types</span>
+├── <span class="text-blue-400">agents/</span>       <span class="text-slate-500"># Sub-agent implementations</span>
+├── <span class="text-blue-400">runtime/</span>      <span class="text-slate-500"># Event loop, self-model & state</span>
+├── <span class="text-blue-400">memory/</span>       <span class="text-slate-500"># Vector stores & semantic context</span>
+├── <span class="text-blue-400">governance/</span>   <span class="text-slate-500"># Permission guards & killswitches</span>
+├── <span class="text-blue-400">automation/</span>   <span class="text-slate-500"># Browser & system macros</span>
+├── <span class="text-blue-400">vision/</span>       <span class="text-slate-500"># Multimodal spatial processing</span>
+├── <span class="text-blue-400">voice/</span>        <span class="text-slate-500"># Audio I/O streaming handlers</span>
+├── <span class="text-blue-400">tools/</span>        <span class="text-slate-500"># API connections & CLI tools</span>
+├── <span class="text-blue-400">integrations/</span> <span class="text-slate-500"># External system adapters</span>
+├── <span class="text-blue-400">execution/</span>    <span class="text-slate-500"># Code sandbox & docker runners</span>
+├── <span class="text-blue-400">api/</span>          <span class="text-slate-500"># REST/WebSocket endpoints</span>
+└── <span class="text-blue-400">ui/</span>           <span class="text-slate-500"># Dashboard & debug interfaces</span>
+</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: CORE MODULES -->
+            <section id="modules" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">04. <span class="text-cyan-400">Core Modules</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4" id="accordion-container">
+                    <!-- Cards will be injected via JS to keep HTML clean -->
+                </div>
+            </section>
+
+            <!-- SECTION 6: RUNTIME FLOW -->
+            <section id="flow" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">05. <span class="text-cyan-400">Runtime Flow</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="glass-panel p-8 relative">
+                    <div class="flex flex-col gap-2">
+                        <!-- Flow Steps -->
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 z-10"><i data-lucide="user" class="text-slate-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1 flex items-center justify-between">
+                                <span class="font-mono text-sm text-cyan-100">User Intent</span>
+                                <span class="text-xs text-slate-500 border border-white/10 px-2 py-0.5 rounded">Input</span>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 0s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-white/5 border border-cyan-500/30 flex items-center justify-center shrink-0 z-10 shadow-[0_0_10px_rgba(0,240,255,0.1)]"><i data-lucide="cpu" class="text-cyan-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1 border-cyan-500/20">
+                                <span class="font-mono text-sm text-white">Runtime Planner</span>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 0.2s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 z-10"><i data-lucide="git-branch" class="text-slate-400 w-5 h-5"></i></div>
+                            <div class="grid grid-cols-2 gap-3 flex-1">
+                                <div class="glass-card p-3 text-center"><span class="font-mono text-xs text-slate-300">Capability Mapping</span></div>
+                                <div class="glass-card p-3 text-center"><span class="font-mono text-xs text-slate-300">Agent Routing</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 0.4s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center shrink-0 z-10"><i data-lucide="shield-alert" class="text-red-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1 border-red-500/20">
+                                <span class="font-mono text-sm text-red-100">Governance Validation</span>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 0.6s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 z-10"><i data-lucide="terminal" class="text-slate-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1">
+                                <span class="font-mono text-sm text-slate-200">Tool Execution</span>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 0.8s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 z-10"><i data-lucide="database" class="text-slate-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1 flex items-center justify-between">
+                                <span class="font-mono text-sm text-slate-200">State Persistence</span>
+                                <span class="text-xs text-slate-500 border border-white/10 px-2 py-0.5 rounded">Memory</span>
+                            </div>
+                        </div>
+
+                        <div class="ml-5 w-0.5 h-6 bg-cyan-500/20 relative animate-flow-line">
+                            <div class="data-particle" style="animation-delay: 1s;"></div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center shrink-0 z-10 shadow-[0_0_10px_rgba(34,197,94,0.1)]"><i data-lucide="check-circle-2" class="text-green-400 w-5 h-5"></i></div>
+                            <div class="glass-card p-3 flex-1 border-green-500/20">
+                                <span class="font-mono text-sm text-green-100">Adaptive Response</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: GOVERNANCE SYSTEM -->
+            <section id="governance" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">06. <span class="text-cyan-400">Governance System</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 border-l-2 border-l-yellow-500/50">
+                        <i data-lucide="lock" class="text-yellow-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">ApprovalGate</h3>
+                        <p class="text-sm text-slate-400 font-light">Human-in-the-loop checkpoint requiring explicit authorization before executing high-stakes tools or sensitive API calls.</p>
+                    </div>
+                    <div class="glass-card p-5 border-l-2 border-l-orange-500/50">
+                        <i data-lucide="shield" class="text-orange-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">ReactiveGuard</h3>
+                        <p class="text-sm text-slate-400 font-light">Real-time output scanning to prevent prompt injection, hallucination spillage, and policy violations during response generation.</p>
+                    </div>
+                    <div class="glass-card p-5 border-l-2 border-l-red-500/50">
+                        <i data-lucide="power-off" class="text-red-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">KillSwitch</h3>
+                        <p class="text-sm text-slate-400 font-light">Immediate orchestration halt protocol triggering global cancellation tokens across all distributed agent swarms.</p>
+                    </div>
+                    <div class="glass-card p-5">
+                        <i data-lucide="box-select" class="text-cyan-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">Boundary Enforcement</h3>
+                        <p class="text-sm text-slate-400 font-light">Strict domain limitations preventing agents from accessing restricted network segments or unauthorized local filesystems.</p>
+                    </div>
+                    <div class="glass-card p-5">
+                        <i data-lucide="key" class="text-cyan-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">Permission Validation</h3>
+                        <p class="text-sm text-slate-400 font-light">RBAC integrated token verification for sub-agent spawning and cross-module resource access requests.</p>
+                    </div>
+                    <div class="glass-card p-5">
+                        <i data-lucide="activity" class="text-cyan-400 w-6 h-6 mb-3"></i>
+                        <h3 class="font-mono text-white mb-2">Execution Monitoring</h3>
+                        <p class="text-sm text-slate-400 font-light">Telemetry layer recording agent decision trees, resource consumption, and anomalous behavioral patterns.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 8: MEMORY SYSTEMS -->
+            <section id="memory" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">07. <span class="text-cyan-400">Memory Systems</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="glass-panel p-1 rounded-lg overflow-hidden relative group">
+                    <canvas id="memoryCanvas" class="w-full h-64 bg-[#030712] rounded z-0"></canvas>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050a14] to-transparent z-10 pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-6 z-20 flex flex-wrap gap-3">
+                        <div class="px-3 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-cyan-300"><i data-lucide="database" class="w-3 h-3 inline mr-1"></i> Vector Memory</div>
+                        <div class="px-3 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-cyan-300"><i data-lucide="search" class="w-3 h-3 inline mr-1"></i> Semantic Retrieval</div>
+                        <div class="px-3 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-cyan-300"><i data-lucide="save" class="w-3 h-3 inline mr-1"></i> Persistent Cognitive State</div>
+                        <div class="px-3 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-cyan-300"><i data-lucide="layers" class="w-3 h-3 inline mr-1"></i> Session Stitching</div>
+                        <div class="px-3 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-cyan-300"><i data-lucide="brain" class="w-3 h-3 inline mr-1"></i> Long-term Context Retention</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 9: MULTI-AGENT ORCHESTRATION -->
+            <section id="orchestration" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">08. <span class="text-cyan-400">Multi-Agent Orchestration</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <ul class="space-y-6">
+                            <li class="flex gap-4">
+                                <div class="mt-1"><i data-lucide="network" class="text-cyan-400 w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-mono text-white text-sm mb-1">Distributed Agent Execution</h4>
+                                    <p class="text-sm text-slate-400 font-light">Parallel processing via worker agents spawned dynamically based on workload and task complexity.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <div class="mt-1"><i data-lucide="briefcase" class="text-cyan-400 w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-mono text-white text-sm mb-1">Task Delegation</h4>
+                                    <p class="text-sm text-slate-400 font-light">Hierarchical decomposition of macro-intents into micro-tasks assigned to specialized agent profiles.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <div class="mt-1"><i data-lucide="share-2" class="text-cyan-400 w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-mono text-white text-sm mb-1">Orchestration Topology</h4>
+                                    <p class="text-sm text-slate-400 font-light">Flexible graph-based coordination networks (Hub-and-Spoke, Sequential, or Mesh) depending on intent mapping.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-4">
+                                <div class="mt-1"><i data-lucide="shuffle" class="text-cyan-400 w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-mono text-white text-sm mb-1">Adaptive Routing</h4>
+                                    <p class="text-sm text-slate-400 font-light">Intelligent load balancing and fallback mechanisms ensuring robust execution if a sub-agent fails.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel p-2 rounded-lg aspect-square relative">
+                        <canvas id="swarmCanvas" class="w-full h-full rounded z-0"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 10: EXTERNAL INTEGRATIONS -->
+            <section id="integrations" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">09. <span class="text-cyan-400">External Integrations</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="webhook" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">APIs</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="globe" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Browser Automation</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="mic" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Voice Systems</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="eye" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Vision Systems</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="laptop-2" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Local Runtime</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="cloud" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Cloud Execution</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="message-square" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Messaging Platforms</span>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 hover-glow cursor-default">
+                        <i data-lucide="database" class="text-slate-300 w-8 h-8"></i>
+                        <span class="font-mono text-sm text-slate-200">Databases</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 11: DEPLOYMENT STACK -->
+            <section id="deployment" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">10. <span class="text-cyan-400">Deployment Stack</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">Railway</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">Redis</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">PostgreSQL</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">Firebase</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">Docker</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">FastAPI</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">LangChain</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">OpenAI APIs</span>
+                    <span class="px-4 py-2 glass-card font-mono text-sm text-cyan-50 border-white/10 hover:border-cyan-500/50 transition-colors">Automation Services</span>
+                </div>
+            </section>
+
+            <!-- SECTION 12: FUTURE ROADMAP -->
+            <section id="roadmap" class="py-20 border-t border-white/5 reveal">
+                <div class="flex items-center gap-4 mb-12">
+                    <h2 class="text-2xl font-mono text-white">11. <span class="text-cyan-400">Future Roadmap</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="relative border-l border-cyan-500/30 ml-3 md:ml-6 space-y-10 pb-4">
+                    
+                    <div class="relative pl-8">
+                        <div class="absolute w-4 h-4 bg-[#030712] border-2 border-cyan-400 rounded-full -left-[8.5px] top-1 shadow-[0_0_10px_#00f0ff]"></div>
+                        <h3 class="font-mono text-lg text-white mb-2">Phase I: Intelligence Expansion</h3>
+                        <div class="glass-card p-4 inline-block w-full max-w-lg">
+                            <ul class="space-y-2 text-sm text-slate-300 font-light list-disc list-inside marker:text-cyan-500/50">
+                                <li>Emotional Intelligence Layer</li>
+                                <li>Screen Intelligence</li>
+                                <li>Autonomous Runtime Intelligence</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8">
+                        <div class="absolute w-4 h-4 bg-[#030712] border-2 border-slate-600 rounded-full -left-[8.5px] top-1"></div>
+                        <h3 class="font-mono text-lg text-slate-300 mb-2">Phase II: OS Integration</h3>
+                        <div class="glass-card p-4 inline-block w-full max-w-lg border-white/5 opacity-80">
+                            <ul class="space-y-2 text-sm text-slate-400 font-light list-disc list-inside marker:text-slate-600">
+                                <li>Humanify OS Integration</li>
+                                <li>Cross-Device Orchestration</li>
+                                <li>Persistent Cognitive State Systems</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="relative pl-8">
+                        <div class="absolute w-4 h-4 bg-[#030712] border-2 border-slate-700 rounded-full -left-[8.5px] top-1"></div>
+                        <h3 class="font-mono text-lg text-slate-500 mb-2">Phase III: Apex</h3>
+                        <div class="glass-card p-4 inline-block w-full max-w-lg border-white/5 opacity-50">
+                            <ul class="space-y-2 text-sm text-slate-500 font-light list-disc list-inside marker:text-slate-700">
+                                <li>Founder Digital Twin</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION 13: ARCHITECT PROFILE -->
+            <section id="architect" class="py-20 border-t border-white/5 reveal mb-20">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-mono text-white">12. <span class="text-cyan-400">Architect Profile</span></h2>
+                    <div class="h-px bg-white/10 flex-1"></div>
+                </div>
+
+                <div class="glass-panel p-8 max-w-2xl relative overflow-hidden group border-cyan-500/20 hover:border-cyan-500/50">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-cyan-400"></div>
+                    <div class="flex items-start gap-6">
+                        <div class="w-20 h-20 rounded bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                            <i data-lucide="user" class="w-10 h-10 text-slate-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-1">Dr. Avishkar Roopi</h3>
+                            <p class="font-mono text-cyan-400 text-sm mb-4">Founder & AI Systems Architect</p>
+                            <p class="text-slate-300 font-light leading-relaxed text-sm md:text-base">
+                                Focused on orchestration infrastructure, cognitive runtime systems, adaptive execution environments, and scalable AI coordination architectures.
+                            </p>
+                            <div class="mt-6 flex gap-3">
+                                <a href="https://github.com/avishkarroopi" target="_blank" class="text-slate-400 hover:text-white transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Core Modules Data
+        const modules = [
+            { id: 'eventbus', title: 'EventBus Runtime', exp: 'Central nervous system for decoupled asynchronous communication.', resp: 'Message routing, pub/sub management.', role: 'Message Broker', behav: 'Non-blocking event dispatching.' },
+            { id: 'capgraph', title: 'CapabilityGraph', exp: 'Directed acyclic graph of registered actions and tools.', resp: 'Action dependency resolution.', role: 'Router', behav: 'Dynamic pathfinding.' },
+            { id: 'toolreg', title: 'ToolRegistry', exp: 'Schema repository for executable functions.', resp: 'Tool validation and parameter typing.', role: 'Librarian', behav: 'Strict schema enforcement.' },
+            { id: 'selfmodel', title: 'SelfModel Engine', exp: 'Maintains awareness of agent states and system health.', resp: 'Introspection and anomaly detection.', role: 'Monitor', behav: 'Continuous self-reflection.' },
+            { id: 'govlayer', title: 'Governance Layer', exp: 'Security boundaries and ethical enforcement.', resp: 'Policy validation, guardrails.', role: 'Gatekeeper', behav: 'Strict rejection on violations.' },
+            { id: 'runplan', title: 'Runtime Planner', exp: 'Breaks intents into sequenced execution steps.', resp: 'Task orchestration.', role: 'Strategist', behav: 'Adaptive replanning.' },
+            { id: 'memorysys', title: 'Memory Systems', exp: 'Dual-layer semantic and episodic storage.', resp: 'Context injection, RAG.', role: 'Archivist', behav: 'Relevance-based retrieval.' },
+            { id: 'agentswarm', title: 'Agent Swarm', exp: 'Distributed pool of specialized worker LLMs.', resp: 'Parallel task execution.', role: 'Workforce', behav: 'Collaborative problem solving.' },
+            { id: 'execengine', title: 'Execution Engine', exp: 'Sandboxed environment for running code/tools.', resp: 'Safe execution, timeout management.', role: 'Runner', behav: 'Isolated environment processing.' },
+            { id: 'auto', title: 'Automation Systems', exp: 'Interfaces for physical system/browser control.', resp: 'UI interaction, macro execution.', role: 'Actuator', behav: 'Deterministic environment mutation.' }
+        ];
+
+        // Populate Modules Accordion
+        const accordionContainer = document.getElementById('accordion-container');
+        modules.forEach((mod, index) => {
+            const html = `
+                <div class="glass-card overflow-hidden">
+                    <button class="accordion-btn w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-mono text-cyan-50 font-medium tracking-wide">
+                            <span class="text-slate-500 mr-2">${String(index + 1).padStart(2, '0')}</span> 
+                            ${mod.title}
+                        </span>
+                        <i data-lucide="chevron-down" class="chevron w-4 h-4 text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content bg-black/20 border-t border-white/5">
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">Explanation</h5>
+                                <p class="text-sm text-slate-300 font-light">${mod.exp}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">Responsibilities</h5>
+                                <p class="text-sm text-slate-300 font-light">${mod.resp}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">Execution Role</h5>
+                                <p class="text-sm text-cyan-400 font-mono">${mod.role}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">Orchestration Behavior</h5>
+                                <p class="text-sm text-slate-300 font-light">${mod.behav}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            accordionContainer.insertAdjacentHTML('beforeend', html);
+        });
+        lucide.createIcons(); // re-init icons for dynamic content
+
+        // Accordion Logic
+        window.toggleAccordion = function(btn) {
+            const content = btn.nextElementSibling;
+            const isOpen = btn.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.accordion-btn').forEach(b => {
+                b.classList.remove('active');
+                b.nextElementSibling.style.maxHeight = null;
+            });
+
+            if (!isOpen) {
+                btn.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        };
+
+        // Scroll Reveal & ScrollSpy Logic
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(section => {
+            observer.observe(section);
+        });
+
+        // ScrollSpy
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Canvas Visualizations
+        function initCanvas() {
+            // Memory Canvas (Particles)
+            const memCanvas = document.getElementById('memoryCanvas');
+            const memCtx = memCanvas.getContext('2d');
+            
+            // Swarm Canvas (Network)
+            const swarmCanvas = document.getElementById('swarmCanvas');
+            const swarmCtx = swarmCanvas.getContext('2d');
+
+            function resize() {
+                memCanvas.width = memCanvas.parentElement.clientWidth;
+                memCanvas.height = memCanvas.parentElement.clientHeight;
+                swarmCanvas.width = swarmCanvas.parentElement.clientWidth;
+                swarmCanvas.height = swarmCanvas.parentElement.clientHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Memory Particles
+            const particles = Array.from({length: 50}, () => ({
+                x: Math.random() * memCanvas.width,
+                y: Math.random() * memCanvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2 + 1
+            }));
+
+            // Swarm Nodes
+            const nodes = Array.from({length: 15}, (_, i) => ({
+                x: i === 0 ? swarmCanvas.width/2 : Math.random() * swarmCanvas.width,
+                y: i === 0 ? swarmCanvas.height/2 : Math.random() * swarmCanvas.height,
+                isCenter: i === 0,
+                vx: i === 0 ? 0 : (Math.random() - 0.5) * 0.2,
+                vy: i === 0 ? 0 : (Math.random() - 0.5) * 0.2,
+            }));
+
+            function draw() {
+                // Clear
+                memCtx.clearRect(0, 0, memCanvas.width, memCanvas.height);
+                swarmCtx.clearRect(0, 0, swarmCanvas.width, swarmCanvas.height);
+
+                // Draw Memory
+                memCtx.fillStyle = 'rgba(0, 240, 255, 0.5)';
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0 || p.x > memCanvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > memCanvas.height) p.vy *= -1;
+                    
+                    memCtx.beginPath();
+                    memCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    memCtx.fill();
+                });
+
+                // Draw Swarm Lines
+                swarmCtx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+                swarmCtx.lineWidth = 1;
+                nodes.forEach((n1, i) => {
+                    nodes.forEach((n2, j) => {
+                        if (i < j) {
+                            const dist = Math.hypot(n1.x - n2.x, n1.y - n2.y);
+                            if (dist < 100 || (n1.isCenter || n2.isCenter)) {
+                                swarmCtx.beginPath();
+                                swarmCtx.moveTo(n1.x, n1.y);
+                                swarmCtx.lineTo(n2.x, n2.y);
+                                swarmCtx.stroke();
+                            }
+                        }
+                    });
+                });
+
+                // Draw Swarm Nodes
+                nodes.forEach(n => {
+                    if (!n.isCenter) {
+                        n.x += n.vx; n.y += n.vy;
+                        if (n.x < 0 || n.x > swarmCanvas.width) n.vx *= -1;
+                        if (n.y < 0 || n.y > swarmCanvas.height) n.vy *= -1;
+                    }
+
+                    swarmCtx.fillStyle = n.isCenter ? '#00f0ff' : '#1f2937';
+                    swarmCtx.strokeStyle = n.isCenter ? '#ffffff' : '#00f0ff';
+                    swarmCtx.lineWidth = 2;
+                    swarmCtx.beginPath();
+                    swarmCtx.arc(n.x, n.y, n.isCenter ? 8 : 4, 0, Math.PI * 2);
+                    swarmCtx.fill();
+                    swarmCtx.stroke();
+                    
+                    if(n.isCenter) {
+                        swarmCtx.shadowBlur = 15;
+                        swarmCtx.shadowColor = '#00f0ff';
+                        swarmCtx.fill();
+                        swarmCtx.shadowBlur = 0;
+                    }
+                });
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+        
+        // Ensure DOM is fully loaded before canvas init
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(initCanvas, 100); 
+        });
+
+        // Mobile Menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.querySelector('aside');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('fixed');
+            sidebar.classList.toggle('w-full');
+            sidebar.classList.toggle('z-40');
+            sidebar.classList.toggle('pt-20');
+        });
+        
+        // Hide sidebar on mobile link click
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.add('hidden');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
