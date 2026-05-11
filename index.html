@@ -1,1172 +1,1212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muziclly 12-Month Mastery | Dr. Avishkar Roopi</title>
+    <title>Dr. Avishkar Roopi | AI Systems Architect & Founder</title>
     
-    <!-- Google Fonts: Outfit for modern, premium feel -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* ==========================================================================
+           ROOT VARIABLES & RESET
+           ========================================================================== */
         :root {
-            --royal-yellow: #FFD700;
-            --royal-yellow-dark: #C5A000;
-            --royal-gray: #1a1a1a;
-            --royal-gray-light: #2a2a2a;
-            --base-black: #050505;
-            --text-white: #ffffff;
-            --text-gray: #b3b3b3;
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            --bg-dark: #030508;
+            --bg-card: rgba(10, 15, 25, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --cyan-glow: #00f0ff;
+            --blue-deep: #0057ff;
+            --gold-accent: #ffb800;
             --glass-border: rgba(255, 255, 255, 0.08);
-            --blur: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(5, 10, 15, 0.5);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--base-black);
-            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
+        h1, h2, h3, h4, h5, h6, .display-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-        /* --- UTILITIES --- */
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ==========================================================================
+           UTILITIES & EFFECTS
+           ========================================================================== */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 5%;
         }
 
-        .text-yellow { color: var(--royal-yellow); }
-        .text-center { text-align: center; }
-        .flex-center { display: flex; align-items: center; justify-content: center; }
-        
-        .section-padding {
-            padding: 80px 0;
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
         }
 
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(to right, #FFD700, #FDB931, #fff);
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #ffffff 0%, var(--cyan-glow) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* Glassmorphism Card */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur));
-            -webkit-backdrop-filter: blur(var(--blur));
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 30px;
-            transition: var(--transition);
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #ffffff 0%, var(--gold-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .glass-card:hover {
-            border-color: var(--royal-yellow);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-weight: 700;
-            border-radius: 50px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            cursor: pointer;
-            font-size: 0.9rem;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, var(--royal-yellow), var(--royal-yellow-dark));
-            color: #000;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), rgba(0, 87, 255, 0.1));
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 14px 28px;
+            border-radius: 100px;
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+            transition: 0.7s ease-in-out;
         }
 
         .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            transform: translateY(-2px);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--royal-yellow);
-            color: var(--royal-yellow);
+        .btn-gold {
+            border: 1px solid rgba(255, 184, 0, 0.3);
+            background: linear-gradient(90deg, rgba(255, 184, 0, 0.1), transparent);
+        }
+        .btn-gold:hover {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
         }
 
-        .btn-outline:hover {
-            background: var(--royal-yellow);
-            color: #000;
-        }
-
-        /* --- 1. HEADER --- */
-        header {
+        /* BACKGROUND EFFECTS */
+        #particle-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            width: 800px; height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 87, 255, 0.15) 0%, transparent 70%);
+            top: -200px; left: -200px;
+            z-index: -1;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        
+        .ambient-glow.right {
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 70%);
+            top: auto; bottom: 10vh; left: auto; right: -200px;
+        }
+
+        /* ==========================================================================
+           NAVIGATION
+           ========================================================================== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 20px 0;
             z-index: 1000;
-            background: rgba(5, 5, 5, 0.85);
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            background: rgba(3, 5, 8, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
             padding: 15px 0;
         }
 
-        nav {
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
         }
-        
-        .logo img {
-            height: 40px;
-            border-radius: 5px;
+
+        .logo span {
+            color: var(--cyan-glow);
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 30px;
         }
 
         .nav-links a {
             font-size: 0.9rem;
+            color: var(--text-muted);
             font-weight: 500;
-            color: var(--text-gray);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--cyan-glow);
             transition: var(--transition);
+            box-shadow: 0 0 10px var(--cyan-glow);
         }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--royal-yellow);
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
-        .muziclly-btn {
-            color: var(--royal-yellow) !important;
-            border: 1px solid var(--royal-yellow);
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        .muziclly-btn:hover {
-            background: var(--royal-yellow);
-            color: #000 !important;
-        }
-
-        .mobile-toggle {
+        .mobile-menu-btn {
             display: none;
-            color: var(--royal-yellow);
+            color: var(--text-main);
             font-size: 1.5rem;
             cursor: pointer;
+            background: none;
+            border: none;
         }
 
-        /* --- 2. HERO SECTION --- */
-        #hero {
-            padding-top: 140px;
-            padding-bottom: 80px;
-            background: radial-gradient(circle at 70% 20%, #1a1a1a 0%, #050505 60%);
+        /* ==========================================================================
+           HERO SECTION
+           ========================================================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
             position: relative;
         }
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 50px;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
             align-items: center;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
+        .hero-subtitle {
+            color: var(--cyan-glow);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             margin-bottom: 20px;
-        }
-
-        .hero-sub {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            margin-bottom: 30px;
-        }
-
-        .founder-creds {
-            margin-bottom: 30px;
-            padding-left: 15px;
-            border-left: 3px solid var(--royal-yellow);
-        }
-
-        .founder-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--royal-yellow);
-        }
-
-        .founder-title {
-            color: #fff;
-            font-weight: 500;
-        }
-
-        .founder-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .badge {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--royal-yellow);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .hero-img-wrapper {
-            position: relative;
-        }
-
-        .hero-img-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--royal-yellow);
-            border-radius: 20px;
-            z-index: 0;
-        }
-
-        .hero-img {
-            position: relative;
-            z-index: 1;
-            border-radius: 20px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            /* Fallback style if image missing */
-            min-height: 400px; 
-            background-color: var(--royal-gray);
-            object-fit: cover;
-        }
-
-        .price-tag {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 10px;
         }
 
-        .old-price {
-            text-decoration: line-through;
-            color: var(--text-gray);
+        .hero-subtitle::before {
+            content: '';
+            width: 40px; height: 1px;
+            background: var(--cyan-glow);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .rotator-container {
+            display: inline-block;
+            color: var(--cyan-glow);
+            font-weight: 700;
+            position: relative;
+            min-width: 300px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* HERO IMAGE & HUD */
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-img-container {
+            position: relative;
+            width: 80%;
+            height: 85%;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 2;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 40px rgba(0, 87, 255, 0.2);
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) brightness(0.9);
+            transition: var(--transition);
+        }
+
+        .profile-img-container:hover img {
+            transform: scale(1.05);
+            filter: contrast(1.2) brightness(1);
+        }
+
+        /* Futuristic HUD Elements */
+        .hud-border {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 30px;
+            z-index: 1;
+            animation: pulse-border 4s infinite alternate;
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 30px; height: 30px;
+            border-color: var(--cyan-glow);
+            border-style: solid;
+            z-index: 3;
+            opacity: 0.7;
+        }
+        .hud-tl { top: -10px; left: -10px; border-width: 2px 0 0 2px; }
+        .hud-tr { top: -10px; right: -10px; border-width: 2px 2px 0 0; }
+        .hud-bl { bottom: -10px; left: -10px; border-width: 0 0 2px 2px; }
+        .hud-br { bottom: -10px; right: -10px; border-width: 0 2px 2px 0; }
+
+        .floating-node {
+            position: absolute;
+            background: rgba(10, 15, 25, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--cyan-glow);
+            z-index: 4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .node-1 { top: 10%; right: -5%; animation-delay: 0s; }
+        .node-2 { bottom: 20%; left: -10%; animation-delay: 2s; }
+        .node-3 { top: 60%; right: -15%; animation-delay: 4s; border-color: var(--gold-accent); color: var(--gold-accent); }
+
+        .floating-node i {
             font-size: 1.2rem;
         }
 
-        .new-price {
-            color: var(--royal-yellow);
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        .scarcity {
-            color: #ff4d4d;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* --- 3. TESTIMONIALS --- */
-        #testimonials {
-            background: var(--royal-gray);
+        /* ==========================================================================
+           SECTIONS (GENERIC)
+           ========================================================================== */
+        section {
+            padding: 120px 0;
+            position: relative;
         }
 
         .section-header {
-            margin-bottom: 60px;
             text-align: center;
+            margin-bottom: 80px;
         }
 
         .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .section-header p {
-            color: var(--text-gray);
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
 
-        .testimonials-grid {
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* ==========================================================================
+           GENESIS ARCHITECTURE SECTION
+           ========================================================================== */
+        .genesis-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
-        .testimonial-card .stars {
-            color: var(--royal-yellow);
+        .arch-card {
+            padding: 40px 30px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            group: hover;
+        }
+
+        .arch-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-glow), transparent);
+            opacity: 0.3;
+            transition: var(--transition);
+        }
+
+        .arch-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 87, 255, 0.1);
+        }
+
+        .arch-card:hover::before {
+            opacity: 1;
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .arch-icon {
+            font-size: 2.5rem;
+            color: var(--cyan-glow);
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .arch-card h3 {
+            font-size: 1.4rem;
             margin-bottom: 15px;
+            color: #fff;
         }
 
-        .testimonial-card p {
-            font-style: italic;
-            margin-bottom: 20px;
-            color: #ddd;
+        .arch-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
-        .client-info h4 {
-            color: var(--royal-yellow);
-            margin-bottom: 2px;
+        /* ==========================================================================
+           MUZICLLY SECTION
+           ========================================================================== */
+        .muziclly-section {
+            position: relative;
+        }
+        
+        .muziclly-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100vw; height: 100%;
+            background: radial-gradient(ellipse at center, rgba(255, 184, 0, 0.03) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .client-info span {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-        }
-
-        .google-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 30px;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-            padding: 10px;
-            border-radius: 10px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* --- 4. HAPPY CLIENTS --- */
-        #happy-clients {
-            padding: 40px 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .clients-flex {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .counter-box {
-            text-align: center;
-        }
-
-        .counter-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--royal-yellow);
-            display: block;
-        }
-
-        .counter-label {
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-            color: var(--text-gray);
-        }
-
-        /* --- 5. WHAT YOU'LL LEARN --- */
-        .learn-grid {
+        .muziclly-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
-        .learn-card {
-            text-align: left;
-            padding: 25px;
-            border-left: 2px solid transparent;
+        .stat-card {
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 184, 0, 0.1);
+            background: rgba(20, 15, 5, 0.4);
+            text-align: center;
+            transition: var(--transition);
         }
 
-        .learn-card:hover {
-            border-left: 2px solid var(--royal-yellow);
-            background: linear-gradient(90deg, rgba(255,215,0,0.05) 0%, rgba(0,0,0,0) 100%);
+        .stat-card:hover {
+            border-color: rgba(255, 184, 0, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 184, 0, 0.1);
         }
 
-        .learn-card h3 {
-            font-size: 1.2rem;
-            color: #fff;
-            margin: 0;
-        }
-        
-        .learn-icon {
-            color: var(--royal-yellow);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+        .stat-number {
+            font-size: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--gold-accent);
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 184, 0, 0.4);
         }
 
-        /* --- 6. ROADMAP --- */
-        #roadmap {
-            background: var(--royal-gray);
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .roadmap-container {
+        /* ==========================================================================
+           TIMELINE SECTION
+           ========================================================================== */
+        .timeline {
             position: relative;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        .roadmap-container::before {
+        .timeline::before {
             content: '';
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: var(--royal-yellow);
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--cyan-glow), transparent);
             opacity: 0.3;
         }
 
-        .roadmap-step {
+        .timeline-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
+            justify-content: flex-end;
+            padding-right: 50%;
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+
+        .timeline-content {
+            width: 80%;
+            padding: 30px;
+            border-radius: 16px;
             position: relative;
         }
 
-        .roadmap-step:nth-child(even) {
-            flex-direction: row-reverse;
+        .timeline-item:nth-child(odd) .timeline-content {
+            text-align: right;
         }
 
-        .step-content {
-            width: 45%;
-            padding: 20px;
-            background: var(--base-black);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            position: relative;
-        }
-        
-        .step-marker {
-            width: 20px;
-            height: 20px;
-            background: var(--royal-yellow);
-            border-radius: 50%;
+        .timeline-dot {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 15px var(--royal-yellow);
+            top: 30px; right: -40px;
+            width: 20px; height: 20px;
+            background: var(--bg-dark);
+            border: 4px solid var(--cyan-glow);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 15px var(--cyan-glow);
         }
 
-        /* --- 7. FREE TOOLS --- */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -40px; right: auto;
         }
 
-        .tool-card {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .timeline-year {
+            color: var(--cyan-glow);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .tool-icon {
-            font-size: 2.5rem;
-            color: var(--royal-yellow);
-            min-width: 60px;
-            text-align: center;
-        }
-
-        /* --- 8. PRICING & URGENCY --- */
-        #pricing {
-            background: linear-gradient(180deg, var(--base-black) 0%, var(--royal-gray) 100%);
-            text-align: center;
-        }
-
-        .pricing-card {
-            max-width: 600px;
-            margin: 0 auto;
-            border: 2px solid var(--royal-yellow);
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.15);
-        }
-
-        .price-large {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--royal-yellow);
-            line-height: 1;
-        }
-
-        .price-original {
-            text-decoration: line-through;
-            font-size: 1.5rem;
-            color: var(--text-gray);
-            margin-right: 15px;
-        }
-
-        .urgency-box {
-            background: rgba(255, 77, 77, 0.1);
-            color: #ff4d4d;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        /* --- 9. PROMISES --- */
-        #promises {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .promises-box {
-            border: 1px solid var(--royal-yellow);
-            background: rgba(255, 215, 0, 0.02);
-            padding: 40px;
-            border-radius: 20px;
-        }
-
-        .promise-list li {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            font-size: 1.1rem;
-        }
-
-        .promise-list i {
-            color: var(--royal-yellow);
-            margin-top: 5px;
-        }
-
-        /* --- 10. ENQUIRY FORM --- */
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border: none;
-            border-bottom: 2px solid var(--royal-gray-light);
-            color: #fff;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-bottom-color: var(--royal-yellow);
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* --- FLOATING BUTTONS --- */
-        .fabs {
+        /* ==========================================================================
+           FLOATING ACTION BUTTONS (SOCIALS)
+           ========================================================================== */
+        .fab-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 40px;
+            right: 40px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             z-index: 999;
         }
 
-        .fab {
-            width: 55px;
-            height: 55px;
+        .fab-item {
+            width: 50px; height: 50px;
             border-radius: 50%;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            align-items: center;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            background: rgba(10, 15, 25, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
             transition: var(--transition);
+            text-decoration: none;
+            position: relative;
         }
 
-        .fab:hover {
-            transform: scale(1.1);
+        .fab-item:hover {
+            transform: scale(1.1) translateX(-5px);
         }
 
-        .fab-whatsapp { background: #25D366; }
-        .fab-call { background: var(--royal-yellow); color: #000; }
+        .fab-wa:hover { border-color: #25D366; color: #25D366; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); }
+        .fab-call:hover { border-color: var(--cyan-glow); color: var(--cyan-glow); box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+        .fab-li:hover { border-color: #0077b5; color: #0077b5; box-shadow: 0 0 20px rgba(0, 119, 181, 0.4); }
+        .fab-gh:hover { border-color: #ffffff; color: #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
 
-        /* --- FOOTER --- */
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
         footer {
-            padding: 40px 0;
-            text-align: center;
+            padding: 80px 0 40px;
             border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-gray);
-            font-size: 0.9rem;
+            position: relative;
+            background: linear-gradient(to top, rgba(0, 87, 255, 0.05), transparent);
         }
 
-        /* --- ANIMATIONS --- */
-        .hidden { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .show { opacity: 1; transform: translateY(0); }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .section-padding { padding: 50px 0; }
-            
-            /* Hero Mobile Fixes */
-            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
-            .hero-content h1 { font-size: 2.2rem; margin-bottom: 15px; }
-            .hero-sub { font-size: 1rem; }
-            #hero { padding-top: 100px; padding-bottom: 50px; }
-            
-            .founder-creds { 
-                border-left: none; 
-                border-top: 3px solid var(--royal-yellow); 
-                padding-top: 15px; 
-                padding-left: 0; 
-                display: inline-block; 
-                margin-bottom: 20px;
-            }
-            .founder-badges { justify-content: center; }
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .footer-logo span { color: var(--cyan-glow); }
 
-            .hero-img-wrapper { 
-                max-width: 100%; 
-                margin: 20px auto 0; 
-            }
-            .hero-img-wrapper::before { top: 15px; right: -15px; }
-            
-            .price-tag { justify-content: center; }
-            .scarcity { justify-content: center; }
+        .footer-desc {
+            color: var(--text-muted);
+            max-width: 400px;
+        }
 
-            /* Nav Mobile Fixes */
+        .footer-links h4 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links ul a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .footer-links ul a:hover {
+            color: var(--cyan-glow);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* ==========================================================================
+           ANIMATIONS & KEYFRAMES
+           ========================================================================== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: inset 0 0 0 rgba(0, 240, 255, 0); }
+            100% { box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.2); }
+        }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN (MOBILE FIRST ADAPTATIONS)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3rem; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-subtitle { justify-content: center; }
+            .hero p { margin: 0 auto 40px; }
+            .hero-actions { justify-content: center; }
+            .profile-img-container { width: 60%; }
+            .muziclly-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
             .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: rgba(5, 5, 5, 0.98); /* Solid dark background */
+                display: none; /* Mobile menu logic via JS */
+                position: absolute;
+                top: 100%; left: 0; width: 100%;
+                background: rgba(3, 5, 8, 0.95);
+                backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 40px;
-                clip-path: circle(0% at 100% 0);
-                transition: all 0.5s ease-in-out;
-                z-index: 998;
-                border-bottom: 1px solid var(--glass-border);
+                padding: 30px;
+                text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
             }
-            .nav-links.active { clip-path: circle(150% at 100% 0); }
-            .mobile-toggle { display: block; }
-
-            /* Roadmap Mobile Fixes */
-            .roadmap-container::before { left: 20px; }
-            .roadmap-step { flex-direction: column !important; align-items: flex-start; padding-left: 60px; margin-bottom: 40px; }
-            .step-marker { left: 20px; transform: translateX(-50%); }
-            .step-content { width: 100%; }
-
-            /* Pricing Mobile Fixes */
-            .price-large { font-size: 3rem; }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
             
-            /* General Grid Fixes */
-            .tools-grid { grid-template-columns: 1fr; }
-            .clients-flex { flex-direction: column; gap: 40px; }
-            .section-header h2 { font-size: 2rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .rotator-container { min-width: auto; display: block; margin-top: 10px; }
+            .profile-img-container { width: 80%; }
+            
+            .timeline::before { left: 30px; }
+            .timeline-item { justify-content: flex-end; padding-right: 0; padding-left: 60px !important; margin-bottom: 40px; }
+            .timeline-content { width: 100%; text-align: left !important; }
+            .timeline-dot { left: -40px !important; right: auto !important; }
+            
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-desc { margin: 0 auto; }
+            
+            .fab-container { bottom: 20px; right: 20px; }
+            .fab-item { width: 40px; height: 40px; font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. STICKY HEADER -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <!-- Updated to stricty use logo.jpg without fallback -->
-                    <img src="logo.jpg" alt="Muziclly">
-                    <span class="text-yellow">Muziclly</span>
+    <!-- Canvas Background Particles -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Ambient Glows -->
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow right"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Avishkar<span>Roopi</span></a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#genesis">Genesis</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#muziclly">Muziclly</a></li>
+                <li><a href="#timeline">Timeline</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content reveal">
+                <div class="hero-subtitle">Founder &bull; Architect &bull; Researcher</div>
+                <h1>Building Persistent <br> <span class="text-gradient-cyan">Cognitive Intelligence</span></h1>
+                
+                <div class="hero-tagline">
+                    Architecting <span class="rotator-container" id="text-rotator">GENESIS AI</span>
                 </div>
                 
-                <div class="nav-links" id="navLinks">
-                    <a href="#hero">Home</a>
-                    <a href="#testimonials">Testimonials</a>
-                    <a href="#happy-clients">Happy Clients</a>
-                    <a href="#learn">What You’ll Learn</a>
-                    <a href="#roadmap">Roadmap</a>
-                    <a href="#tools">Free Tools</a>
-                    <a href="https://avishkarroopi.github.io/muzicllyworld/" class="muziclly-btn" target="_blank">Muziclly Official</a>
+                <p>Creating GENESIS — a governed multi-agent orchestration architecture focused on adaptive execution systems, runtime cognition, and scalable AI infrastructure.</p>
+                
+                <div class="hero-actions">
+                    <a href="#genesis" class="btn-primary">
+                        Explore GENESIS <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#research" class="btn-primary glass-panel" style="background: transparent;">
+                        View Research
+                    </a>
                 </div>
-
-                <div class="mobile-toggle" onclick="toggleMenu()">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- 2. HERO SECTION -->
-    <section id="hero">
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-content fade-on-scroll">
-                    <div class="founder-creds">
-                        <div class="founder-name">Dr. Avishkar Roopi</div>
-                        <div class="founder-title">India’s Leading Music Educator</div>
-                        <div class="founder-badges">
-                            <span class="badge">Honorary Doctorate</span>
-                            <span class="badge">BA - KMMC (A.R. Rahman’s Academy)</span>
-                            <span class="badge">14+ Years Exp</span>
-                        </div>
-                    </div>
-
-                    <h1 class="gradient-text">Learn Music the Way Real Musicians Do — Ear Training, Scales & Composition.</h1>
-                    <p class="hero-sub">Stop memorizing notes. Start understanding music. Unlock your ability to play any song by listening in 12 months.</p>
-
-                    <div class="price-tag">
-                        <span class="old-price">₹9,999</span>
-                        <span class="new-price">₹99</span>
-                    </div>
-<div style="text-align:center; margin-bottom:15px;">
-  <span style="color:#ff6a00; font-weight:600;">Offer ends in:</span>
-  <span id="timer" style="color:#ff6a00; font-weight:700;"></span>
-</div>
-                    <a href="https://wa.me/919550429016" class="btn btn-primary">Enroll Now – Limited Seats</a>
+            </div>
+            
+            <div class="hero-image reveal" style="transition-delay: 0.2s;">
+                <div class="hero-image-wrapper">
+                    <div class="hud-border"></div>
+                    <div class="hud-corner hud-tl"></div>
+                    <div class="hud-corner hud-tr"></div>
+                    <div class="hud-corner hud-bl"></div>
+                    <div class="hud-corner hud-br"></div>
                     
-                    <div class="scarcity">
-                        <i class="fas fa-exclamation-circle"></i> Access will be closed once seats are filled
+                    <div class="profile-img-container">
+                        <!-- Image Fallback applied via inline style for safety, but src is provided -->
+                        <img src="avishkar.jpg" alt="Dr. Avishkar Roopi" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
                     </div>
-                </div>
-
-                <div class="hero-img-wrapper fade-on-scroll">
-                    <!-- Updated to strictly use founder.jpg without fallback -->
-                    <img src="founder.jpg" alt="Dr. Avishkar Roopi" class="hero-img">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. TESTIMONIALS SECTION -->
-    <section id="testimonials" class="section-padding">
-        <div class="container">
-            <div class="section-header fade-on-scroll">
-                <h2>Real Results. Real Trust.</h2>
-                <p>Genuine feedback from Avishkar Academy of Music</p>
-            </div>
-
-            <div class="testimonials-grid">
-                <!-- Testimonial 1 -->
-                <div class="glass-card testimonial-card fade-on-scroll">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    
+                    <!-- Floating Tech Nodes -->
+                    <div class="floating-node node-1">
+                        <i class="fas fa-network-wired"></i> Runtime Orchestration
                     </div>
-                    <p>"I never thought I could understand music theory this easily. The approach to ear training is revolutionary. Highly recommended for anyone serious about music."</p>
-                    <div class="client-info">
-                        <h4>Sandhya Gayatri P</h4>
-                        <span>Student</span>
+                    <div class="floating-node node-2">
+                        <i class="fas fa-microchip"></i> Cognitive Infrastructure
                     </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="glass-card testimonial-card fade-on-scroll">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p>"My child has improved drastically. Dr. Avishkar's method isn't just about playing songs, it's about understanding the language of music. A truly premium education."</p>
-                    <div class="client-info">
-                        <h4>Mariam H</h4>
-                        <span>Parent – UK</span>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="glass-card testimonial-card fade-on-scroll">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p>"The scale logic and chord family system finally made sense to me after years of confusion. This is the best music mentoring I've received."</p>
-                    <div class="client-info">
-                        <h4>Shiva Rama Krishna</h4>
-                        <span>Student</span>
-                    </div>
-                </div>
-
-                <!-- Testimonial 4 -->
-                <div class="glass-card testimonial-card fade-on-scroll">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p>"Excellent teacher with deep knowledge. The systematic approach to composition and ear training sets this apart from local classes."</p>
-                    <div class="client-info">
-                        <h4>Teja Verrapaneni</h4>
-                        <span>Student</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="google-badge">
-                <i class="fab fa-google text-yellow"></i>
-                <span style="color:#fff; font-size: 0.9rem;">Verified Google Reviews | Avishkar Academy of Music</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. HAPPY CLIENTS -->
-    <section id="happy-clients">
-        <div class="container">
-            <div class="clients-flex">
-                <div class="counter-box">
-                    <span class="counter-number" data-target="1550">0</span>
-                    <span class="counter-label">Students Trained</span>
-                </div>
-                <div class="counter-box">
-                    <span class="counter-number" data-target="200">0</span>
-                    <span class="counter-label">Teachers Mentored</span>
-                </div>
-                <div class="counter-box">
-                    <span class="counter-number" data-target="15">0</span>
-                    <span class="counter-label">Countries</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. WHAT YOU WILL LEARN -->
-    <section id="learn" class="section-padding">
-        <div class="container">
-            <div class="section-header fade-on-scroll">
-                <h2>Master The System</h2>
-                <p>Beyond Memorization</p>
-            </div>
-
-            <div class="learn-grid">
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-exclamation-triangle learn-icon"></i>
-                    <h3>The Real Problem in Music Education</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-music learn-icon"></i>
-                    <h3>How Music Actually Works (Simplified)</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-project-diagram learn-icon"></i>
-                    <h3>Scale Logic & Song Understanding</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-guitar learn-icon"></i>
-                    <h3>Chord Family System</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-headphones-alt learn-icon"></i>
-                    <h3>Ear Training (Core Secret)</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-magic learn-icon"></i>
-                    <h3>Playing Songs Without Notes</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-microphone-alt learn-icon"></i>
-                    <h3>Live Composition Logic</h3>
-                </div>
-                <div class="glass-card learn-card fade-on-scroll">
-                    <i class="fas fa-user-astronaut learn-icon"></i>
-                    <h3>Becoming an Independent Musician</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. ROADMAP -->
-    <section id="roadmap" class="section-padding">
-        <div class="container">
-            <div class="section-header fade-on-scroll">
-                <h2>Your Transformation Path</h2>
-            </div>
-
-            <div class="roadmap-container">
-                <div class="roadmap-step fade-on-scroll">
-                    <div class="step-marker"></div>
-                    <div class="step-content">
-                        <h3 class="text-yellow">Phase 1: Confusion</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Struggling with notes, memorizing blindly, unable to identify pitch.</p>
-                    </div>
-                    <div style="width: 45%;"></div>
-                </div>
-
-                <div class="roadmap-step fade-on-scroll">
-                    <div class="step-marker"></div>
-                    <div class="step-content">
-                        <h3 class="text-yellow">Phase 2: Clarity</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Understanding the logic of scales, chords, and how songs are constructed.</p>
-                    </div>
-                    <div style="width: 45%;"></div>
-                </div>
-
-                <div class="roadmap-step fade-on-scroll">
-                    <div class="step-marker"></div>
-                    <div class="step-content">
-                        <h3 class="text-yellow">Phase 3: Independence</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Developing ear training to decode songs without needing a teacher.</p>
-                    </div>
-                    <div style="width: 45%;"></div>
-                </div>
-
-                <div class="roadmap-step fade-on-scroll">
-                    <div class="step-marker"></div>
-                    <div class="step-content">
-                        <h3 class="text-yellow">Phase 4: Mastery</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Composing, improvising, and playing naturally like a professional.</p>
-                    </div>
-                    <div style="width: 45%;"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 7. FREE TOOLS -->
-    <section id="tools" class="section-padding">
-        <div class="container">
-            <div class="section-header fade-on-scroll">
-                <h2>Premium Bonuses</h2>
-                <p>Register today to unlock exclusive tools</p>
-            </div>
-
-            <div class="tools-grid">
-                <div class="glass-card tool-card fade-on-scroll">
-                    <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
-                    <div>
-                        <h3 style="color:#fff;">1-Year Mastery Roadmap</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">PDF Blueprint</p>
-                    </div>
-                </div>
-                <div class="glass-card tool-card fade-on-scroll">
-                    <div class="tool-icon"><i class="fas fa-list-ol"></i></div>
-                    <div>
-                        <h3 style="color:#fff;">Structured Practice Framework</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Routine Builder</p>
-                    </div>
-                </div>
-                <div class="glass-card tool-card fade-on-scroll">
-                    <div class="tool-icon"><i class="fas fa-assistive-listening-systems"></i></div>
-                    <div>
-                        <h3 style="color:#fff;">Ear Training System Access</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Exclusive Module</p>
-                    </div>
-                </div>
-                <div class="glass-card tool-card fade-on-scroll">
-                    <div class="tool-icon"><i class="fas fa-key"></i></div>
-                    <div>
-                        <h3 style="color:#fff;">Song Decoding Framework</h3>
-                        <p style="color:#aaa; font-size:0.9rem;">Cheatsheet</p>
+                    <div class="floating-node node-3">
+                        <i class="fas fa-wave-square"></i> Audio Intelligence
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 8. PRICING & URGENCY -->
-    <section id="pricing" class="section-padding">
+    <!-- Genesis Section (Architecture) -->
+    <section id="genesis">
         <div class="container">
-            <div class="glass-card pricing-card fade-on-scroll">
-                <div style="margin-bottom: 20px;">
-                    <span style="background: var(--royal-yellow); color:#000; padding: 5px 15px; border-radius: 20px; font-weight:700; font-size:0.8rem;">WEBINAR EXCLUSIVE</span>
+            <div class="section-header reveal">
+                <h2>The <span class="text-gradient-cyan">GENESIS</span> Architecture</h2>
+                <p>A sophisticated framework designed for persistent, governed multi-agent operations and adaptive execution across complex enterprise environments.</p>
+            </div>
+
+            <div class="genesis-grid">
+                <!-- Card 1 -->
+                <div class="arch-card glass-panel reveal">
+                    <i class="fas fa-project-diagram arch-icon"></i>
+                    <h3>Multi-Agent Systems</h3>
+                    <p>Decentralized node coordination allowing autonomous agents to negotiate, collaborate, and execute complex systemic workflows.</p>
                 </div>
-                <h2>Muziclly 12-Month Mastery Webinar</h2>
-                <div style="margin: 30px 0;">
-                    <span class="price-original">₹9,999</span>
-                    <span class="price-large">₹99</span>
+                <!-- Card 2 -->
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.1s;">
+                    <i class="fas fa-shield-alt arch-icon"></i>
+                    <h3>Runtime Governance</h3>
+                    <p>Strict boundary enforcement and ethical constraint mapping executed in real-time to ensure deterministic and safe AI outputs.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.2s;">
+                    <i class="fas fa-brain arch-icon"></i>
+                    <h3>Capability Graphs</h3>
+                    <p>Dynamic mapping of agent skills, allowing the orchestrator to route tasks to the most optimized cognitive node efficiently.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="arch-card glass-panel reveal">
+                    <i class="fas fa-toolbox arch-icon"></i>
+                    <h3>ToolRegistry</h3>
+                    <p>Secure, authenticated API surface granting agents deterministic access to external data systems and execution environments.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.1s;">
+                    <i class="fas fa-bolt arch-icon"></i>
+                    <h3>Reactive Execution</h3>
+                    <p>Event-driven architecture enabling the system to halt, reassess, and redirect compute resources based on real-world stream changes.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.2s;">
+                    <i class="fas fa-database arch-icon"></i>
+                    <h3>Persistent Memory</h3>
+                    <p>Vectorized state preservation allowing the architecture to maintain continuous context over prolonged execution horizons.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Muziclly Section -->
+    <section id="muziclly" class="muziclly-section">
+        <div class="container muziclly-grid">
+            <div class="muziclly-content reveal">
+                <div class="hero-subtitle" style="color: var(--gold-accent);">Education Ecosystem</div>
+                <h2>Muziclly &mdash; <br><span class="text-gradient-gold">Music Intelligence</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; max-width: 500px;">
+                    Bridging the gap between auditory art and cognitive science. Over a decade of pioneering curriculum design, institutional mentoring, and algorithmic integration in music education.
+                </p>
+                
+                <div class="hero-actions">
+                    <a href="#" class="btn-primary btn-gold">
+                        Explore Muziclly <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                    </a>
+                    <a href="#" class="btn-primary glass-panel" style="background: transparent;">
+                        Visit Webinar
+                    </a>
+                </div>
+            </div>
+
+            <div class="stats-grid reveal" style="transition-delay: 0.2s;">
+                <div class="stat-card">
+                    <div class="stat-number">14+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1500+</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Teachers Mentored</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Global Countries</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Applied <span class="text-gradient-cyan">Research</span></h2>
+                <p>Ongoing investigations at the intersection of cognitive architecture, audio-visual computing, and persistent multi-agent orchestration.</p>
+            </div>
+
+            <div class="genesis-grid">
+                <div class="arch-card glass-panel reveal">
+                    <h3 style="color: var(--cyan-glow); font-size: 1.1rem; font-family: 'Inter'; letter-spacing: 1px; text-transform: uppercase;">Paper / Ongoing</h3>
+                    <h3 style="font-size: 1.5rem; margin-top: 10px;">Cognitive Architectures in LLMs</h3>
+                    <p style="margin-top: 15px;">Structuring deterministic behavior pathways in stochastic large language models through rigorous runtime supervision.</p>
+                </div>
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.1s;">
+                    <h3 style="color: var(--cyan-glow); font-size: 1.1rem; font-family: 'Inter'; letter-spacing: 1px; text-transform: uppercase;">System Design</h3>
+                    <h3 style="font-size: 1.5rem; margin-top: 10px;">Adaptive Execution Engines</h3>
+                    <p style="margin-top: 15px;">Designing fault-tolerant execution nodes that dynamically alter strategy when facing constrained API environments.</p>
+                </div>
+                <div class="arch-card glass-panel reveal" style="transition-delay: 0.2s;">
+                    <h3 style="color: var(--cyan-glow); font-size: 1.1rem; font-family: 'Inter'; letter-spacing: 1px; text-transform: uppercase;">Architecture</h3>
+                    <h3 style="font-size: 1.5rem; margin-top: 10px;">Persistent System Memory</h3>
+                    <p style="margin-top: 15px;">Graph-based memory injection techniques to maintain hyper-contextual awareness across distributed AI nodes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>The <span class="text-gradient-cyan">Evolution</span></h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-year">Present</div>
+                        <h3>Cognitive Infrastructure</h3>
+                        <p>Leading the development of persistent AI ecosystems and runtime governance models for enterprise scalability.</p>
+                    </div>
                 </div>
                 
-                <div class="urgency-box">
-                    <i class="fas fa-clock"></i> This is NOT a recorded course. Live + Limited Access.
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-year">Genesis Era</div>
+                        <h3>GENESIS Architecture</h3>
+                        <p>Architected the foundational principles of governed multi-agent orchestration, moving beyond basic LLM wrappers.</p>
+                    </div>
                 </div>
-                <p style="color:var(--text-gray); margin-bottom: 30px;">Seats will close without notice.</p>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-year">Research Phase</div>
+                        <h3>AI Systems Research</h3>
+                        <p>Deep dive into machine learning frameworks, cognitive modeling, and autonomous system design.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-year">Muziclly Founding</div>
+                        <h3>Founder & Educator</h3>
+                        <p>Built Muziclly. Scaled to 1500+ students globally. Blended algorithmic thinking with auditory arts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand reveal">
+                    <a href="#" class="footer-logo">Avishkar<span>Roopi</span></a>
+                    <p class="footer-desc">Building the future of persistent cognitive intelligence infrastructure and shaping the ecosystem of AI-driven architecture.</p>
+                </div>
                 
-                <a href="https://wa.me/919550429016" class="btn btn-primary" style="width: 100%;">Claim Your Spot</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 9. PROMISES -->
-    <section id="promises" class="section-padding">
-        <div class="container">
-            <div class="promises-box fade-on-scroll">
-                <div class="section-header" style="margin-bottom: 30px;">
-                    <h2>Our Commitment To You</h2>
+                <div class="footer-links reveal" style="transition-delay: 0.1s;">
+                    <h4>Architecture</h4>
+                    <ul>
+                        <li><a href="#genesis">GENESIS Framework</a></li>
+                        <li><a href="#research">Cognitive Systems</a></li>
+                        <li><a href="#research">Applied Research</a></li>
+                        <li><a href="#muziclly">Muziclly Ecosystem</a></li>
+                    </ul>
                 </div>
-                <ul class="promise-list">
-                    <li><i class="fas fa-check-circle"></i> Play songs by listening — without notes</li>
-                    <li><i class="fas fa-check-circle"></i> Understand scales instead of memorizing blindly</li>
-                    <li><i class="fas fa-check-circle"></i> Identify chords naturally by ear</li>
-                    <li><i class="fas fa-check-circle"></i> Compose your own music confidently</li>
-                    <li><i class="fas fa-check-circle"></i> Become independent from teachers</li>
-                    <li><i class="fas fa-check-circle"></i> Learn faster than traditional academies</li>
-                    <li><i class="fas fa-check-circle"></i> Build real musical confidence in 12 months</li>
-                </ul>
+                
+                <div class="footer-links reveal" style="transition-delay: 0.2s;">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://www.linkedin.com/in/avishkar-roopi" target="_blank">LinkedIn</a></li>
+                        <li><a href="https://github.com/avishkarroopi" target="_blank">GitHub</a></li>
+                        <li><a href="https://wa.me/919398017435" target="_blank">WhatsApp</a></li>
+                        <li><a href="mailto:contact@avishkarroopi.in">Email Inquiries</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- 10. ENQUIRY FORM -->
-    <section id="enquiry" class="section-padding" style="background: var(--base-black);">
-        <div class="container">
-            <div class="section-header fade-on-scroll">
-                <h2>Secure Your Seat</h2>
-                <p>Join the elite circle of musicians</p>
+            
+            <div class="copyright">
+                &copy; <span id="year"></span> Dr. Avishkar Roopi. All rights reserved. Cinematic UI/UX.
             </div>
-
-            <div class="form-container fade-on-scroll">
-                <form onsubmit="event.preventDefault(); alert('Registration Submitted!');">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Full Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Email Address" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" class="form-control" placeholder="Phone Number" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">REGISTER NOW</button>
-                    <p style="text-align: center; color: var(--text-gray); font-size: 0.8rem; margin-top: 15px;">
-                        <i class="fas fa-lock"></i> Your information is safe with us.
-                    </p>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <div class="logo flex-center" style="margin-bottom: 20px; justify-content: center;">
-                 <span class="text-yellow">Muziclly</span>
-            </div>
-            <p>&copy; 2024 Muziclly | Dr. Avishkar Roopi. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- FLOATING ACTIONS -->
-    <div class="fabs">
-        <a href="#" class="fab fab-whatsapp"><i class="fab fa-whatsapp"></i></a>
-        <a href="#" class="fab fab-call"><i class="fas fa-phone-alt"></i></a>
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <a href="https://wa.me/919398017435" target="_blank" class="fab-item fab-wa" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+919398017435" class="fab-item fab-call" title="Call">
+            <i class="fas fa-phone"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/avishkar-roopi" target="_blank" class="fab-item fab-li" title="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="https://github.com/avishkarroopi" target="_blank" class="fab-item fab-gh" title="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- Scripts -->
     <script>
-        // Mobile Menu Toggle
-        function toggleMenu() {
-            const nav = document.getElementById('navLinks');
-            nav.classList.toggle('active');
-        }
+        // 1. Dynamic Year
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-            });
-        });
+        // 2. Navbar Scroll Effect & Mobile Menu
+        const navbar = document.getElementById('navbar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
 
-        // Scroll Animation Observer
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
-                    entry.target.classList.remove('hidden');
-                }
-            });
-        }, observerOptions);
-
-        const hiddenElements = document.querySelectorAll('.fade-on-scroll');
-        hiddenElements.forEach((el) => {
-            el.classList.add('hidden');
-            observer.observe(el);
-        });
-
-        // Animated Counters
-        const counters = document.querySelectorAll('.counter-number');
-        let hasAnimated = false;
-
-        const counterObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && !hasAnimated) {
-                counters.forEach(counter => {
-                    const target = +counter.getAttribute('data-target');
-                    const duration = 2000; // 2 seconds
-                    const increment = target / (duration / 16); 
-
-                    let current = 0;
-                    const updateCounter = () => {
-                        current += increment;
-                        if (current < target) {
-                            counter.innerText = Math.ceil(current) + "+";
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            counter.innerText = target + "+";
-                        }
-                    };
-                    updateCounter();
-                });
-                hasAnimated = true;
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
 
-        const counterSection = document.querySelector('#happy-clients');
-        if (counterSection) {
-            counterObserver.observe(counterSection);
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // 3. Text Rotator Animation
+        const roles = [
+            "GENESIS AI", 
+            "Persistent Cognitive Systems", 
+            "Multi-Agent Orchestration", 
+            "Runtime Governance", 
+            "Cognitive Architecture", 
+            "AI Infrastructure"
+        ];
+        const rotatorEl = document.getElementById('text-rotator');
+        let roleIndex = 0;
+
+        setInterval(() => {
+            rotatorEl.style.opacity = '0';
+            rotatorEl.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                roleIndex = (roleIndex + 1) % roles.length;
+                rotatorEl.textContent = roles[roleIndex];
+                rotatorEl.style.opacity = '1';
+                rotatorEl.style.transform = 'translateY(0)';
+                rotatorEl.style.transition = 'all 0.5s ease';
+            }, 500); // Wait for fade out
+        }, 3500);
+
+        // 4. Scroll Reveal (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Run once
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 5. Cinematic Particle Network (Canvas)
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
         }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > height) this.vy = -this.vy;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles based on screen size to prevent lag
+        const particleCount = window.innerWidth < 768 ? 40 : 100;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Draw connecting lines (Neural network effect)
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 - dist/1000})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        
+        animateParticles();
     </script>
-    <script>
-var countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
-
-var x = setInterval(function() {
-  var now = new Date().getTime();
-  var distance = countDownDate - now;
-
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  document.getElementById("timer").innerHTML =
-    hours + "H " + minutes + "M " + seconds + "S ";
-
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("timer").innerHTML = "Offer Expired";
-  }
-}, 1000);
-</script>
 </body>
 </html>
-
-
-
-
